@@ -1,0 +1,25 @@
+@startuml
+
+actor Utilisateur
+participant "Interface de commande" as Interface
+participant Serveur
+
+activate Utilisateur
+
+Utilisateur->Interface: Consulter_liste_equipements()
+
+activate Interface
+Interface->Serveur: Demande_liste_equipements()
+activate Serveur
+
+
+alt "Erreur de récupération des détails"
+    Interface-->Utilisateur: Afficher_message_erreur("Erreur de récupération des détails")
+end
+  Serveur-->Interface: Liste_equipements_disponibles()
+    Interface-->Utilisateur: Afficher_liste_equipements(liste_equipements)
+deactivate Serveur
+deactivate Interface
+deactivate Utilisateur
+
+@enduml

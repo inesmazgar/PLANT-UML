@@ -1,0 +1,42 @@
+@startuml
+
+actor Utilisateur as Utilisateur
+participant "Interface de commande" as Interface
+participant "Système CasaControl" as Systeme
+
+note left of Utilisateur : Scénario nominal
+
+Utilisateur -> Interface : Se_connecter()
+activate Interface
+Interface -> Systeme : Envoyer_identifiants()
+activate Systeme
+Systeme -> Systeme : Valider_identifiants()
+Systeme --> Interface : Valider()
+Interface --> Utilisateur : Afficher_interface_formulaire_ajout()
+deactivate Systeme
+
+note left of Utilisateur : Scénario alternatif
+
+
+alt Identifiants invalides
+    Systeme --> Interface : Identifiants_invalides()
+    Interface --> Utilisateur : Afficher_message_erreur()
+    end 
+
+Utilisateur -> Interface : remplire_formulaire_ajout()
+Interface -> Systeme : envoyer_informations_formulaire()
+Systeme -> Systeme : Valider_informations()
+Systeme --> Interface : Confirmer_ajout()
+Interface--> Utilisateur : Confirmer_ajout()
+deactivate Interface
+
+note left of Utilisateur : Scénario alternatif
+
+
+alt Equipement_existant
+    Systeme -> Systeme : Valider_informations()
+    Systeme --> Interface : Equipement_existant()
+    Interface --> Utilisateur : Afficher_message_erreur()
+end 
+
+@enduml
